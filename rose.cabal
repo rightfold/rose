@@ -1,0 +1,29 @@
+name:                rose
+version:             0.1.0.0
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Language.Rose.AST, Language.Rose.Lex, Language.Rose.Parse
+  ghc-options:         -Wall
+  build-depends:       array, base
+  build-tools:         alex, happy
+  default-language:    Haskell2010
+
+executable rosec
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , rose
+  default-language:    Haskell2010
+
+test-suite rose-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , rose
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
