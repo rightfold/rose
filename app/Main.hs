@@ -12,4 +12,12 @@ main = print . parse . alexScanTokens $ code
                \class IO is\n\
                \  fn f(): void is\n\
                \    x;\n\
+               \  fn f(): T is\n\
+               \    x;\n\
+               \  fn f(): N~T is\n\
+               \    x;\n\
+               \  fn f(): ~N~T is\n\
+               \    x;\n\
+               \  fn f(): ~T is\n\
+               \    x;\n\
                \end;\n"

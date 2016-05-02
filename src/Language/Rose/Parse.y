@@ -77,6 +77,7 @@ ValueParamList : '(' ')' { [] }
 NamespaceName : identifier                   { [$1] }
               | identifier '~' NamespaceName { $1 : $3 }
 
-QualifiedName : identifier        { QualifiedName Nothing $1 }
-              | NamespaceName     { QualifiedName (Just (init $1)) (last $1) }
+QualifiedName : NamespaceName
+                  { QualifiedName (if null (init $1) then Nothing else Just (init $1))
+                                  (last $1) }
               | '~' NamespaceName { QualifiedName (Just (init $2)) (last $2) }
