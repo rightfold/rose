@@ -3,7 +3,7 @@ module Language.Rose.Parse
 ( parse
 ) where
 
-import Language.Rose.AST (ModuleDecl(ModuleDecl))
+import Language.Rose.AST
 import Language.Rose.Lex (Token(..))
 }
 
@@ -12,15 +12,25 @@ import Language.Rose.Lex (Token(..))
 %error { error . show }
 
 %token
-  module              { Module }
+  namespace           { Namespace }
+  using               { Using }
 
   identifier          { Identifier $$ }
 
-  '{'                 { LeftBrace }
-  '}'                 { RightBrace }
-  '='                 { Equals }
   ';'                 { Semicolon }
+  '~'                 { Tilde }
 
 %%
 
-ModuleDecl : module identifier '{' '}' { ModuleDecl $2 [] }
+File :           { [] }
+     | Decl File { $1 : $2 }
+
+Decl : NamespaceDecl { $1 }
+     | UsingDecl     { $1 }
+
+NamespaceDecl : namespace NamespaceName ';' { NamespaceDecl $2 }
+
+UsingDecl : using NamespaceName ';' { UsingDecl $2 }
+
+NamespaceName : identifier                   { [$1] }
+              | identifier '~' NamespaceName { $1 : $3 }

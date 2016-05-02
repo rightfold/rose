@@ -5,4 +5,7 @@ import Language.Rose.Parse (parse)
 
 main :: IO ()
 main = print . parse . alexScanTokens $ code
-  where code = "module Main { }"
+  where code = "namespace Hello~World~Test;\n\
+               \using FH~IO;\n\
+               \using Hello~World~Icle;\n\
+               \using PDO;\n"

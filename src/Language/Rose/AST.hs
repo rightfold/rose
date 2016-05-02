@@ -1,12 +1,8 @@
 module Language.Rose.AST where
 
-data ModuleDecl = ModuleDecl String [Decl] deriving (Show)
+type File = [Decl]
 
 data Decl
-  = LetDecl String TermExpr
-  deriving (Show)
-
-data TermExpr
-  = NameTermExpr String
-  | ApplyTermExpr TermExpr TermExpr
+  = NamespaceDecl [String]
+  | UsingDecl [String]
   deriving (Show)

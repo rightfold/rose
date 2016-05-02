@@ -7,24 +7,22 @@ module Language.Rose.Lex where
 tokens :-
   $white              ;
 
-  module              { const Module }
+  namespace           { const Namespace }
+  using               { const Using }
 
   [a-zA-Z]+           { Identifier }
 
-  \{                  { const LeftBrace }
-  \}                  { const RightBrace }
-  \=                  { const Equals }
   \;                  { const Semicolon }
+  \~                  { const Tilde }
 
 {
 data Token
-  = Module
+  = Namespace
+  | Using
 
   | Identifier String
 
-  | LeftBrace
-  | RightBrace
-  | Equals
   | Semicolon
+  | Tilde
   deriving (Eq, Show)
 }
