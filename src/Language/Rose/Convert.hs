@@ -4,14 +4,18 @@ module Language.Rose.Convert
 
 import Data.List (intercalate)
 import Data.Map (Map)
-import Data.Map as Map
 import Language.Rose.AST
 
+import qualified Data.Map as Map
+
 data ValueSymbol
+  = VariableValueSymbol
 
 data TypeSymbol
 
-data Env = Env (Map String ValueSymbol) (Map String TypeSymbol)
+data Env = Env { vsyms :: Map String ValueSymbol
+               , tsyms :: Map String TypeSymbol
+               }
 
 convert :: File -> String
 convert file = convert' (Env Map.empty Map.empty) file
@@ -26,12 +30,26 @@ convertDecl env (ClassDecl n _ _ ds) =
   "final class " ++ n ++ " {\n" ++ (ds >>= convertClassMemberDecl env) ++ "}\n"
 
 convertClassMemberDecl :: Env -> ClassMemberDecl -> String
-convertClassMemberDecl env (FnClassMemberDecl n _ rt _) =
-  "public final function " ++ n ++ "(): " ++ convertTypeExpr env rt ++ " {\n}\n"
+convertClassMemberDecl env (FnClassMemberDecl n ps rt b) =
+  "public final function " ++ n
+  ++ "(): " ++ convertTypeExpr env rt -- TODO: parameters
+  ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}\n"
+  where bEnv = foldl (\e (p, _) -> e { vsyms = Map.insert p VariableValueSymbol (vsyms e) })
+                     env ps
 
 convertTypeExpr :: Env -> TypeExpr -> String
 convertTypeExpr env (NameTypeExpr n) = convertQualifiedName env n
 convertTypeExpr _   VoidTypeExpr     = "void"
+
+convertExprS :: Env -> (String -> String) -> Expr -> String
+convertExprS env result e = result (convertExprE env e)
+
+convertExprE :: Env -> Expr -> String
+convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
+  case Map.lookup n (vsyms env) of
+    Just VariableValueSymbol -> "$" ++ n
+    _ -> convertQualifiedName env q
+convertExprE env (NameExpr n) = convertQualifiedName env n
 
 convertNamespaceName :: Env -> NamespaceName -> String
 convertNamespaceName _ name = intercalate "\\" name
