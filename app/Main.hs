@@ -10,4 +10,6 @@ main = print . parse . alexScanTokens $ code
                \using Hello~World~Icle;\n\
                \using PDO;\n\
                \class IO is\n\
+               \  fn f(): void is\n\
+               \    x;\n\
                \end;\n"
