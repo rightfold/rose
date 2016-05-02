@@ -23,6 +23,7 @@ import Language.Rose.Lex (Token(..))
   identifier          { Identifier $$ }
 
   ':'                 { Colon }
+  ','                 { Comma }
   '('                 { ParenLeft }
   ')'                 { ParenRight }
   ';'                 { Semicolon }
@@ -72,7 +73,12 @@ NameExpr : identifier { NameExpr $1 }
 ClassMemberDecls :                                  { [] }
                  | ClassMemberDecl ClassMemberDecls { $1 : $2 }
 
-ValueParamList : '(' ')' { [] }
+ValueParamList : '(' ValueParams ')' { [] }
+
+ValueParams :                            { [] }
+            | ValueParam ',' ValueParams { $1 : $3 }
+
+ValueParam : identifier ':' TypeExpr { ($1, $3) }
 
 NamespaceName : identifier                   { [$1] }
               | identifier '~' NamespaceName { $1 : $3 }

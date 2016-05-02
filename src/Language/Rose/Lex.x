@@ -18,6 +18,7 @@ tokens :-
   [a-zA-Z]+           { Identifier }
 
   \:                  { const Colon }
+  \,                  { const Comma }
   \(                  { const ParenLeft }
   \)                  { const ParenRight }
   \;                  { const Semicolon }
@@ -36,6 +37,7 @@ data Token
   | Identifier String
 
   | Colon
+  | Comma
   | ParenLeft
   | ParenRight
   | Semicolon

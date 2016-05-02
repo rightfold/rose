@@ -10,14 +10,14 @@ main = print . parse . alexScanTokens $ code
                \using Hello~World~Icle;\n\
                \using PDO;\n\
                \class IO is\n\
-               \  fn f(): void is\n\
+               \  fn f(x: bool): void is\n\
                \    x;\n\
-               \  fn f(): T is\n\
+               \  fn f(x: int): T is\n\
                \    x;\n\
-               \  fn f(): N~T is\n\
+               \  fn f(x: string): N~T is\n\
                \    x;\n\
-               \  fn f(): ~N~T is\n\
+               \  fn f(x: mixed): ~N~T is\n\
                \    x;\n\
-               \  fn f(): ~T is\n\
+               \  fn f(x: float): ~T is\n\
                \    x;\n\
                \end;\n"
