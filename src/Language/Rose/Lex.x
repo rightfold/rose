@@ -7,6 +7,9 @@ module Language.Rose.Lex where
 tokens :-
   $white              ;
 
+  class               { const Class }
+  end                 { const End }
+  is                  { const Is }
   namespace           { const Namespace }
   using               { const Using }
 
@@ -17,7 +20,10 @@ tokens :-
 
 {
 data Token
-  = Namespace
+  = Class
+  | End
+  | Is
+  | Namespace
   | Using
 
   | Identifier String
