@@ -32,7 +32,8 @@ convertDecl env (ClassDecl n _ _ ds) =
 convertClassMemberDecl :: Env -> ClassMemberDecl -> String
 convertClassMemberDecl env (FnClassMemberDecl n ps rt b) =
   "public final function " ++ n
-  ++ "(): " ++ convertTypeExpr env rt -- TODO: parameters
+  ++ "(" ++ intercalate "," (map (\(p, t) -> convertTypeExpr env t ++ " $" ++ p) ps)
+  ++ "): " ++ convertTypeExpr env rt -- TODO: parameters
   ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}\n"
   where bEnv = foldl (\e (p, _) -> e { vsyms = Map.insert p VariableValueSymbol (vsyms e) })
                      env ps
