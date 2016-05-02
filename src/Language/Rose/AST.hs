@@ -22,5 +22,5 @@ data TypeExpr
   deriving (Show)
 
 data Expr
-  = NameExpr String
+  = NameExpr QualifiedName
   deriving (Show)

@@ -66,16 +66,17 @@ VoidTypeExpr : void { VoidTypeExpr }
 
 Expr : NameExpr { $1 }
 
-NameExpr : identifier { NameExpr $1 }
+NameExpr : QualifiedName { NameExpr $1 }
 
 
 
 ClassMemberDecls :                                  { [] }
                  | ClassMemberDecl ClassMemberDecls { $1 : $2 }
 
-ValueParamList : '(' ValueParams ')' { [] }
+ValueParamList : '(' ValueParams ')' { $2 }
 
 ValueParams :                            { [] }
+            | ValueParam                 { [$1] }
             | ValueParam ',' ValueParams { $1 : $3 }
 
 ValueParam : identifier ':' TypeExpr { ($1, $3) }

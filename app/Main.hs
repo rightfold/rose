@@ -1,10 +1,15 @@
 module Main where
 
+import Language.Rose.Convert (convert)
 import Language.Rose.Lex (alexScanTokens)
 import Language.Rose.Parse (parse)
 
 main :: IO ()
-main = print . parse . alexScanTokens $ code
+main = do
+  let ast = parse . alexScanTokens $ code
+  print ast
+  let hack = convert ast
+  putStrLn hack
   where code = "namespace Hello~World~Test;\n\
                \using FH~IO;\n\
                \using Hello~World~Icle;\n\
