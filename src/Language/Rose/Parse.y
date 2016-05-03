@@ -64,7 +64,10 @@ VoidTypeExpr : void { VoidTypeExpr }
 
 
 
-Expr : NameExpr { $1 }
+Expr : CallExpr { $1 }
+
+CallExpr : NameExpr { $1 }
+         | CallExpr ValueArgList { FnCallExpr $1 $2 }
 
 NameExpr : QualifiedName { NameExpr $1 }
 
@@ -72,6 +75,14 @@ NameExpr : QualifiedName { NameExpr $1 }
 
 ClassMemberDecls :                                  { [] }
                  | ClassMemberDecl ClassMemberDecls { $1 : $2 }
+
+ValueArgList : '(' ValueArgs ')' { $2 }
+
+ValueArgs :                        { [] }
+          | ValueArg               { [$1] }
+          | ValueArg ',' ValueArgs { $1 : $3 }
+
+ValueArg : Expr { $1 }
 
 ValueParamList : '(' ValueParams ')' { $2 }
 

@@ -51,6 +51,8 @@ convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
     Just VariableValueSymbol -> "$" ++ n
     _ -> convertQualifiedName env q
 convertExprE env (NameExpr n) = convertQualifiedName env n
+convertExprE env (FnCallExpr c as) =
+  "call_user_func(" ++ convertExprE env c ++ (as >>= (", " ++) . convertExprE env) ++ ")"
 
 convertNamespaceName :: Env -> NamespaceName -> String
 convertNamespaceName _ name = intercalate "\\" name

@@ -16,13 +16,13 @@ main = do
                \using PDO;\n\
                \class IO is\n\
                \  fn f(x: bool): void is\n\
-               \    x;\n\
+               \    x(y);\n\
                \  fn f(x: int): T is\n\
-               \    x;\n\
+               \    x(y)(z);\n\
                \  fn f(x: string): N~T is\n\
-               \    x;\n\
+               \    x(y(z));\n\
                \  fn f(x: mixed): ~N~T is\n\
-               \    x;\n\
+               \    x();\n\
                \  fn f(x: float): ~T is\n\
-               \    x;\n\
+               \    x(y, z);\n\
                \end;\n"

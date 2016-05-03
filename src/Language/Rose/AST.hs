@@ -23,4 +23,5 @@ data TypeExpr
 
 data Expr
   = NameExpr QualifiedName
+  | FnCallExpr Expr [Expr]
   deriving (Show)
