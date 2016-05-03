@@ -16,6 +16,7 @@ import Language.Rose.Lex (Token(..))
   end                 { End }
   fn                  { Fn }
   is                  { Is }
+  module              { Module }
   namespace           { Namespace }
   using               { Using }
   void                { Void }
@@ -39,6 +40,7 @@ File :           { [] }
 Decl : NamespaceDecl { $1 }
      | UsingDecl     { $1 }
      | ClassDecl     { $1 }
+     | ModuleDecl    { $1 }
 
 NamespaceDecl : namespace NamespaceName ';' { NamespaceDecl $2 }
 
@@ -46,12 +48,14 @@ UsingDecl : using NamespaceName ';' { UsingDecl $2 }
 
 ClassDecl : class identifier is ClassMemberDecls end ';' { ClassDecl $2 Nothing [] $4 }
 
+ModuleDecl : module identifier is ClassMemberDecls end ';' { ModuleDecl $2 $4 }
+
 
 
 ClassMemberDecl : FnClassMemberDecl { $1 }
 
 FnClassMemberDecl : fn identifier ValueParamList ':' TypeExpr is Expr ';'
-                      { FnClassMemberDecl $2 $3 $5 $7 }
+                      { FnClassMemberDecl False $2 $3 $5 $7 }
 
 
 

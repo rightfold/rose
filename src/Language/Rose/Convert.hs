@@ -28,10 +28,14 @@ convertDecl env (NamespaceDecl n) = "namespace " ++ convertNamespaceName env n +
 convertDecl env (UsingDecl n) = "using " ++ convertNamespaceName env n ++ ";\n"
 convertDecl env (ClassDecl n _ _ ds) =
   "final class " ++ n ++ " {\n" ++ (ds >>= convertClassMemberDecl env) ++ "}\n"
+convertDecl env (ModuleDecl n ds) =
+  convertDecl env (ClassDecl n Nothing [] (map makeStatic ds))
+  where makeStatic (FnClassMemberDecl _ n ps rt b) =
+          FnClassMemberDecl True n ps rt b
 
 convertClassMemberDecl :: Env -> ClassMemberDecl -> String
-convertClassMemberDecl env (FnClassMemberDecl n ps rt b) =
-  "public final function " ++ n
+convertClassMemberDecl env (FnClassMemberDecl static n ps rt b) =
+  "public " ++ (if static then "static" else "final") ++ " function " ++ n
   ++ "(" ++ intercalate "," (map (\(p, t) -> convertTypeExpr env t ++ " $" ++ p) ps)
   ++ "): " ++ convertTypeExpr env rt -- TODO: parameters
   ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}\n"

@@ -11,6 +11,7 @@ tokens :-
   end                 { const End }
   fn                  { const Fn }
   is                  { const Is }
+  module              { const Module }
   namespace           { const Namespace }
   using               { const Using }
   void                { const Void }
@@ -30,6 +31,7 @@ data Token
   | End
   | Fn
   | Is
+  | Module
   | Namespace
   | Using
   | Void

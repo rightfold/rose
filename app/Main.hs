@@ -14,6 +14,9 @@ main = do
                \using FH~IO;\n\
                \using Hello~World~Icle;\n\
                \using PDO;\n\
+               \module M is\n\
+               \  fn f(): void is x;\n\
+               \end;\n\
                \class IO is\n\
                \  fn f(x: bool): void is\n\
                \    x(y);\n\

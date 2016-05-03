@@ -10,10 +10,11 @@ data Decl
   = NamespaceDecl NamespaceName
   | UsingDecl NamespaceName
   | ClassDecl String (Maybe QualifiedName) [QualifiedName] [ClassMemberDecl]
+  | ModuleDecl String [ClassMemberDecl]
   deriving (Show)
 
 data ClassMemberDecl
-  = FnClassMemberDecl String [(String, TypeExpr)] TypeExpr Expr
+  = FnClassMemberDecl Bool String [(String, TypeExpr)] TypeExpr Expr
   deriving (Show)
 
 data TypeExpr
