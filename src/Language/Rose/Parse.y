@@ -27,6 +27,7 @@ import Language.Rose.Lex (Token(..))
   ','                 { Comma }
   '('                 { ParenLeft }
   ')'                 { ParenRight }
+  '.'                 { Period }
   ';'                 { Semicolon }
   '~'                 { Tilde }
 
@@ -70,10 +71,16 @@ VoidTypeExpr : void { VoidTypeExpr }
 
 Expr : CallExpr { $1 }
 
-CallExpr : NameExpr { $1 }
-         | CallExpr ValueArgList { FnCallExpr $1 $2 }
+CallExpr : PrimExpr { $1 }
+         | CallExpr ValueArgList { CallExpr $1 $2 }
+         | CallExpr '.' identifier { InstanceMethodExpr $1 $3 }
+
+PrimExpr : NameExpr         { $1 }
+         | StaticMethodExpr { $1 }
 
 NameExpr : QualifiedName { NameExpr $1 }
+
+StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 
 
 

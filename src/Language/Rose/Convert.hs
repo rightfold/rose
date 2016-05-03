@@ -55,8 +55,12 @@ convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
     Just VariableValueSymbol -> "$" ++ n
     _ -> convertQualifiedName env q
 convertExprE env (NameExpr n) = convertQualifiedName env n
-convertExprE env (FnCallExpr c as) =
+convertExprE env (CallExpr c as) =
   "call_user_func(" ++ convertExprE env c ++ (as >>= (", " ++) . convertExprE env) ++ ")"
+convertExprE env (InstanceMethodExpr e n) =
+  "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
+convertExprE env (StaticMethodExpr c n) =
+  "class_meth(" ++ convertQualifiedName env c ++ "::class, '" ++ n ++ "')"
 
 convertNamespaceName :: Env -> NamespaceName -> String
 convertNamespaceName _ name = intercalate "\\" name

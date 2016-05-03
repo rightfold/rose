@@ -22,6 +22,7 @@ tokens :-
   \,                  { const Comma }
   \(                  { const ParenLeft }
   \)                  { const ParenRight }
+  \.                  { const Period }
   \;                  { const Semicolon }
   \~                  { const Tilde }
 
@@ -42,6 +43,7 @@ data Token
   | Comma
   | ParenLeft
   | ParenRight
+  | Period
   | Semicolon
   | Tilde
   deriving (Eq, Show)
