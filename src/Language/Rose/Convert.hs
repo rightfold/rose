@@ -2,6 +2,7 @@ module Language.Rose.Convert
 ( convert
 ) where
 
+import Data.Function ((&))
 import Data.List (intercalate)
 import Data.Map (Map)
 import Language.Rose.AST
@@ -10,6 +11,7 @@ import qualified Data.Map as Map
 
 data ValueSymbol
   = VariableValueSymbol
+  deriving (Eq)
 
 data TypeSymbol
 
@@ -85,6 +87,18 @@ convertExprE env (CallExpr c as) =
 convertExprE env (NewExpr c as) =
   "new " ++ convertTypeExpr env c
   ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
+convertExprE env (LambdaExpr ps b) =
+  "function"
+  ++ "(" ++ intercalate ", " (map ("$" ++) ps) ++ ")"
+  ++ (if null frees then "" else " use(" ++ intercalate ", " (map ("$" ++) frees) ++ ")")
+  ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}"
+  where bEnv = foldl (\e p -> e { vsyms = Map.insert p VariableValueSymbol (vsyms e) })
+                     env ps
+        frees = Map.toList (vsyms env)
+                & filter ((== VariableValueSymbol) . snd)
+                & map fst
+                & filter (/= "this")
+                & filter (not . (`elem` ps))
 convertExprE env (InstanceMethodExpr e n) =
   "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
 convertExprE env (StaticMethodExpr c n) =

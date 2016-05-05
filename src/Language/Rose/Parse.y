@@ -92,7 +92,10 @@ FnTypeExpr : fn '(' TypeExprs ')' '=>' TypeExpr { FnTypeExpr $3 $6 }
 
 
 
-Expr : CallExpr { $1 }
+Expr : LambdaExpr { $1 }
+
+LambdaExpr : fn '(' Identifiers ')' '=>' Expr { LambdaExpr $3 $6 }
+           | CallExpr { $1 }
 
 CallExpr : PrimExpr { $1 }
          | CallExpr ValueArgList { CallExpr $1 $2 }
@@ -109,6 +112,10 @@ StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 NewExpr : new TypeExpr ValueArgList { NewExpr $2 $3 }
 
 
+
+Identifiers :                            { [] }
+            | identifier                 { [$1] }
+            | identifier ',' Identifiers { $1 : $3 }
 
 SFV : static  { AST.Static }
     |         { Final }
