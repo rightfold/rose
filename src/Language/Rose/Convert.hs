@@ -81,6 +81,12 @@ convertExprS env result (LetExpr n v b) =
   convertExprS env (\e -> "$" ++ n ++ " = " ++ e ++ ";\n") v
   ++ convertExprS bEnv result b
   where bEnv = env { vsyms = Map.insert n VariableValueSymbol (vsyms env) }
+convertExprS env result (IfExpr c t f) =
+  "if (" ++ convertExprE env c ++ ") {\n"
+  ++ convertExprS env result t
+  ++ "} else {\n"
+  ++ convertExprS env result f
+  ++ "}\n"
 convertExprS env result e = result (convertExprE env e)
 
 convertExprE :: Env -> Expr -> String

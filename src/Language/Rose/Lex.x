@@ -16,11 +16,14 @@ tokens :-
   field               { const Field }
   using               { const Using }
   cast                { const Cast }
+  else                { const Else }
+  then                { const Then }
   void                { const Void }
   end                 { const End }
   let                 { const Let }
   new                 { const New }
   fn                  { const Fn }
+  if                  { const If }
   is                  { const Is }
   in                  { const In }
 
@@ -51,11 +54,14 @@ data Token
   | Field
   | Using
   | Cast
+  | Else
+  | Then
   | Void
   | End
   | Let
   | New
   | Fn
+  | If
   | Is
   | In
 

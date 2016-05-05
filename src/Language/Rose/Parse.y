@@ -22,11 +22,14 @@ import qualified Language.Rose.Lex as Lex
   field               { Field }
   using               { Using }
   cast                { Cast }
+  else                { Else }
+  then                { Then }
   void                { Void }
   end                 { End }
   let                 { Let }
   new                 { New }
   fn                  { Fn }
+  if                  { If }
   in                  { In }
   is                  { Is }
 
@@ -103,6 +106,7 @@ Expr : LambdaExpr { $1 }
 
 LambdaExpr : fn '(' Identifiers ')' '=>' Expr { LambdaExpr $3 $6 }
            | let identifier '=' Expr in Expr { LetExpr $2 $4 $6 }
+           | if Expr then Expr else Expr { IfExpr $2 $4 $6 }
            | CallExpr { $1 }
 
 CallExpr : PrimExpr { $1 }

@@ -39,6 +39,7 @@ data Expr
   | CastExpr TypeExpr Expr
   | LambdaExpr [String] Expr
   | LetExpr String Expr Expr
+  | IfExpr Expr Expr Expr
   | InstanceMethodExpr Expr String
   | InstanceVariableExpr Expr String
   | StaticMethodExpr QualifiedName String
