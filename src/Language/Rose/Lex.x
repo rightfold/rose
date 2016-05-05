@@ -9,7 +9,9 @@ tokens :-
   \-\-.*              ;
 
   namespace           { const Namespace }
+  virtual             { const Virtual }
   module              { const Module }
+  static              { const Static }
   class               { const Class }
   field               { const Field }
   using               { const Using }
@@ -38,7 +40,9 @@ tokens :-
 {
 data Token
   = Namespace
+  | Virtual
   | Module
+  | Static
   | Class
   | Field
   | Using

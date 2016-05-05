@@ -4,7 +4,9 @@ module Language.Rose.Parse
 ) where
 
 import Language.Rose.AST
+import qualified Language.Rose.AST as AST
 import Language.Rose.Lex (Token(..))
+import qualified Language.Rose.Lex as Lex
 }
 
 %name parse
@@ -13,7 +15,9 @@ import Language.Rose.Lex (Token(..))
 
 %token
   namespace           { Namespace }
+  virtual             { Lex.Virtual }
   module              { Module }
+  static              { Lex.Static }
   class               { Class }
   field               { Field }
   using               { Using }
@@ -68,8 +72,8 @@ ClassMemberDecl : CtorClassMemberDecl { $1 }
 CtorClassMemberDecl : new '(' CtorParams ')' ';'
                         { CtorClassMemberDecl $3 }
 
-FnClassMemberDecl : fn identifier ValueParamList ':' TypeExpr is Expr ';'
-                      { FnClassMemberDecl False $2 $3 $5 $7 }
+FnClassMemberDecl : SFV fn identifier ValueParamList ':' TypeExpr is Expr ';'
+                      { FnClassMemberDecl $1 $3 $4 $6 $8 }
 
 
 
@@ -99,6 +103,10 @@ NameExpr : QualifiedName { NameExpr $1 }
 StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 
 
+
+SFV : static  { AST.Static }
+    |         { Final }
+    | virtual { AST.Virtual }
 
 TypeParamList :                    { [] }
               | '[' TypeParams ']' { $2 }

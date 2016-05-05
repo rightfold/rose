@@ -30,6 +30,11 @@ convertTypeParamList _ ts = "<" ++ intercalate ", " (map go ts) ++ ">"
         go (TypeParam Contravariant n) = "-" ++ n
         go (TypeParam Invariant     n) = n
 
+convertSFV :: SFV -> String
+convertSFV Static  = "static"
+convertSFV Final   = "final"
+convertSFV Virtual = "virtual"
+
 convertDecl :: Env -> Decl -> String
 convertDecl env (NamespaceDecl n) = "namespace " ++ convertNamespaceName env n ++ ";\n"
 convertDecl env (UsingDecl n) = "using " ++ convertNamespaceName env n ++ ";\n"
@@ -39,7 +44,7 @@ convertDecl env (ClassDecl n ts _ _ ds) =
 convertDecl env (ModuleDecl n ds) =
   convertDecl env (ClassDecl n [] Nothing [] (map makeStatic ds))
   where makeStatic (FnClassMemberDecl _ n ps rt b) =
-          FnClassMemberDecl True n ps rt b
+          FnClassMemberDecl Static n ps rt b
 
 convertClassMemberDecl :: Env -> ClassMemberDecl -> String
 convertClassMemberDecl env (CtorClassMemberDecl ps) =
@@ -47,8 +52,8 @@ convertClassMemberDecl env (CtorClassMemberDecl ps) =
   ++ "(" ++ intercalate ", " (map param ps) ++ ") { }\n"
   where param (True, n, t)  = "private " ++ convertTypeExpr env t ++ " $" ++ n
         param (False, n, t) = convertTypeExpr env t ++ " $" ++ n
-convertClassMemberDecl env (FnClassMemberDecl static n ps rt b) =
-  "public " ++ (if static then "static" else "final") ++ " function " ++ n
+convertClassMemberDecl env (FnClassMemberDecl sfv n ps rt b) =
+  "public " ++ convertSFV sfv ++ " function " ++ n
   ++ "(" ++ intercalate "," (map (\(p, t) -> convertTypeExpr env t ++ " $" ++ p) ps)
   ++ "): " ++ convertTypeExpr env rt -- TODO: parameters
   ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}\n"

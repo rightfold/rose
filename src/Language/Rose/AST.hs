@@ -10,6 +10,8 @@ data TypeParam = TypeParam Variance String deriving (Show)
 
 data Variance = Covariant | Contravariant | Invariant deriving (Show)
 
+data SFV = Static | Final | Virtual deriving (Show)
+
 data Decl
   = NamespaceDecl NamespaceName
   | UsingDecl NamespaceName
@@ -19,7 +21,7 @@ data Decl
 
 data ClassMemberDecl
   = CtorClassMemberDecl [(Bool, String, TypeExpr)]
-  | FnClassMemberDecl Bool String [(String, TypeExpr)] TypeExpr Expr
+  | FnClassMemberDecl SFV String [(String, TypeExpr)] TypeExpr Expr
   deriving (Show)
 
 data TypeExpr
