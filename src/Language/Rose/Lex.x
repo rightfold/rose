@@ -6,13 +6,16 @@ module Language.Rose.Lex where
 
 tokens :-
   $white              ;
+  \-\-.*              ;
 
   namespace           { const Namespace }
   module              { const Module }
   class               { const Class }
+  field               { const Field }
   using               { const Using }
   void                { const Void }
   end                 { const End }
+  new                 { const New }
   fn                  { const Fn }
   is                  { const Is }
 
@@ -34,14 +37,16 @@ tokens :-
 
 {
 data Token
-  = Class
-  | End
-  | Fn
-  | Is
+  = Namespace
   | Module
-  | Namespace
+  | Class
+  | Field
   | Using
   | Void
+  | End
+  | New
+  | Fn
+  | Is
 
   | Identifier String
 

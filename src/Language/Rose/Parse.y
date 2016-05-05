@@ -15,9 +15,11 @@ import Language.Rose.Lex (Token(..))
   namespace           { Namespace }
   module              { Module }
   class               { Class }
+  field               { Field }
   using               { Using }
   void                { Void }
   end                 { End }
+  new                 { New }
   fn                  { Fn }
   is                  { Is }
 
@@ -60,7 +62,11 @@ ModuleDecl : module identifier is ClassMemberDecls end ';' { ModuleDecl $2 $4 }
 
 
 
-ClassMemberDecl : FnClassMemberDecl { $1 }
+ClassMemberDecl : CtorClassMemberDecl { $1 }
+                | FnClassMemberDecl   { $1 }
+
+CtorClassMemberDecl : new '(' CtorParams ')' ';'
+                        { CtorClassMemberDecl $3 }
 
 FnClassMemberDecl : fn identifier ValueParamList ':' TypeExpr is Expr ';'
                       { FnClassMemberDecl False $2 $3 $5 $7 }
@@ -112,6 +118,13 @@ ValueArgs :                        { [] }
           | ValueArg ',' ValueArgs { $1 : $3 }
 
 ValueArg : Expr { $1 }
+
+CtorParams :                          { [] }
+           | CtorParam                { [$1] }
+           | CtorParam ',' CtorParams { $1 : $3 }
+
+CtorParam : identifier ':' TypeExpr       { (False, $1, $3) }
+          | field identifier ':' TypeExpr { (True, $2, $4) }
 
 ValueParamList : '(' ValueParams ')' { $2 }
 

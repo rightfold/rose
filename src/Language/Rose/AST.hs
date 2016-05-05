@@ -18,7 +18,8 @@ data Decl
   deriving (Show)
 
 data ClassMemberDecl
-  = FnClassMemberDecl Bool String [(String, TypeExpr)] TypeExpr Expr
+  = CtorClassMemberDecl [(Bool, String, TypeExpr)]
+  | FnClassMemberDecl Bool String [(String, TypeExpr)] TypeExpr Expr
   deriving (Show)
 
 data TypeExpr
