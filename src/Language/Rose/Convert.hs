@@ -97,6 +97,9 @@ convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
 convertExprE env (NameExpr n) = convertQualifiedName env n
 convertExprE env (CallExpr n@(NameExpr _) as) =
   convertExprE env n ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
+convertExprE env (CallExpr (StaticMethodExpr c n) as) =
+  convertQualifiedName env c ++ "::" ++ n
+  ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
 convertExprE env (CallExpr c as) =
   "call_user_func(" ++ convertExprE env c ++ (as >>= (", " ++) . convertExprE env) ++ ")"
 convertExprE env (NewExpr c as) =
