@@ -25,7 +25,7 @@ convert' env = (>>= convertDecl env)
 
 convertTypeParamList :: Env -> [TypeParam] -> String
 convertTypeParamList _ [] = ""
-convertTypeParamList _ ts = "[" ++ intercalate ", " (map go ts) ++ "]"
+convertTypeParamList _ ts = "<" ++ intercalate ", " (map go ts) ++ ">"
   where go (TypeParam Covariant     n) = "+" ++ n
         go (TypeParam Contravariant n) = "-" ++ n
         go (TypeParam Invariant     n) = n
