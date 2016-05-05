@@ -74,8 +74,8 @@ ClassMemberDecl : CtorClassMemberDecl { $1 }
 CtorClassMemberDecl : new '(' CtorParams ')' ';'
                         { CtorClassMemberDecl $3 }
 
-FnClassMemberDecl : SFV fn identifier ValueParamList ':' TypeExpr is Expr ';'
-                      { FnClassMemberDecl $1 $3 $4 $6 $8 }
+FnClassMemberDecl : SFV fn identifier TypeParamList ValueParamList ':' TypeExpr is Expr ';'
+                      { FnClassMemberDecl $1 $3 $4 $5 $7 $9 }
 
 
 

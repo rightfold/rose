@@ -45,8 +45,8 @@ convertDecl env (ClassDecl n ts _ _ ds) =
    ++ " {\n" ++ (ds >>= convertClassMemberDecl env) ++ "}\n"
 convertDecl env (ModuleDecl n ds) =
   convertDecl env (ClassDecl n [] Nothing [] (map makeStatic ds))
-  where makeStatic (FnClassMemberDecl _ n ps rt b) =
-          FnClassMemberDecl Static n ps rt b
+  where makeStatic (FnClassMemberDecl _ n ts ps rt b) =
+          FnClassMemberDecl Static n ts ps rt b
 
 convertClassMemberDecl :: Env -> ClassMemberDecl -> String
 convertClassMemberDecl env (CtorClassMemberDecl ps) =
@@ -54,8 +54,9 @@ convertClassMemberDecl env (CtorClassMemberDecl ps) =
   ++ "(" ++ intercalate ", " (map param ps) ++ ") { }\n"
   where param (True, n, t)  = "private " ++ convertTypeExpr env t ++ " $" ++ n
         param (False, n, t) = convertTypeExpr env t ++ " $" ++ n
-convertClassMemberDecl env (FnClassMemberDecl sfv n ps rt b) =
+convertClassMemberDecl env (FnClassMemberDecl sfv n ts ps rt b) =
   "public " ++ convertSFV sfv ++ " function " ++ n
+  ++ convertTypeParamList env ts
   ++ "(" ++ intercalate "," (map (\(p, t) -> convertTypeExpr env t ++ " $" ++ p) ps)
   ++ "): " ++ convertTypeExpr env rt -- TODO: parameters
   ++ " {\n" ++ convertExprS bEnv (\e -> "return " ++ e ++ ";\n") b ++ "}\n"

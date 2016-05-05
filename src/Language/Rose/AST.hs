@@ -21,7 +21,7 @@ data Decl
 
 data ClassMemberDecl
   = CtorClassMemberDecl [(Bool, String, TypeExpr)]
-  | FnClassMemberDecl SFV String [(String, TypeExpr)] TypeExpr Expr
+  | FnClassMemberDecl SFV String [TypeParam] [(String, TypeExpr)] TypeExpr Expr
   deriving (Show)
 
 data TypeExpr
