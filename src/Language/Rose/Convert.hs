@@ -18,7 +18,7 @@ data Env = Env { vsyms :: Map String ValueSymbol
                }
 
 convert :: File -> String
-convert file = convert' (Env Map.empty Map.empty) file
+convert file = convert' (Env (Map.singleton "this" VariableValueSymbol) Map.empty) file
 
 convert' :: Env -> File -> String
 convert' env = (>>= convertDecl env)
