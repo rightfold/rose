@@ -23,7 +23,7 @@ tokens :-
   is                  { const Is }
   in                  { const In }
 
-  [a-zA-Z]+           { Identifier }
+  [a-zA-Z_]+          { Identifier }
 
   \=\>                { const ThickArrow }
   \-\>                { const ThinArrow }
