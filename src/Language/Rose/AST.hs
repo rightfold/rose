@@ -25,6 +25,7 @@ data ClassMemberDecl
 data TypeExpr
   = NameTypeExpr QualifiedName
   | VoidTypeExpr
+  | FnTypeExpr [TypeExpr] TypeExpr
   deriving (Show)
 
 data Expr

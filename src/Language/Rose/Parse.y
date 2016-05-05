@@ -75,10 +75,13 @@ FnClassMemberDecl : fn identifier ValueParamList ':' TypeExpr is Expr ';'
 
 TypeExpr : NameTypeExpr { $1 }
          | VoidTypeExpr { $1 }
+         | FnTypeExpr   { $1 }
 
 NameTypeExpr : QualifiedName { NameTypeExpr $1 }
 
 VoidTypeExpr : void { VoidTypeExpr }
+
+FnTypeExpr : fn '(' TypeExprs ')' '=>' TypeExpr { FnTypeExpr $3 $6 }
 
 
 
@@ -133,6 +136,10 @@ ValueParams :                            { [] }
             | ValueParam ',' ValueParams { $1 : $3 }
 
 ValueParam : identifier ':' TypeExpr { ($1, $3) }
+
+TypeExprs :                        { [] }
+          | TypeExpr               { [$1] }
+          | TypeExpr ',' TypeExprs { $1 : $3 }
 
 NamespaceName : identifier                   { [$1] }
               | identifier '~' NamespaceName { $1 : $3 }
