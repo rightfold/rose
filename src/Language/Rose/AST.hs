@@ -29,6 +29,7 @@ data TypeExpr
   | VoidTypeExpr
   | FnTypeExpr [TypeExpr] TypeExpr
   | AppliedTypeExpr TypeExpr [TypeExpr]
+  | NullableTypeExpr TypeExpr
   deriving (Show)
 
 data Expr

@@ -37,6 +37,7 @@ tokens :-
   \)                  { const ParenRight }
   \.                  { const Period }
   \+                  { const Plus }
+  \?                  { const QuestionMark }
   \;                  { const Semicolon }
   \~                  { const Tilde }
 
@@ -71,6 +72,7 @@ data Token
   | ParenRight
   | Period
   | Plus
+  | QuestionMark
   | Semicolon
   | Tilde
   deriving (Eq, Show)

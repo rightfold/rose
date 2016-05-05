@@ -73,6 +73,8 @@ convertTypeExpr env (FnTypeExpr ps r)      =
 convertTypeExpr env (AppliedTypeExpr p ts) =
   convertTypeExpr env p
   ++ "<" ++ intercalate ", " (map (convertTypeExpr env) ts) ++ ">"
+convertTypeExpr env (NullableTypeExpr t) =
+  "?" ++ convertTypeExpr env t
 
 convertExprS :: Env -> (String -> String) -> Expr -> String
 convertExprS env result (LetExpr n v b) =

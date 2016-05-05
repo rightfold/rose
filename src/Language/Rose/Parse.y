@@ -43,6 +43,7 @@ import qualified Language.Rose.Lex as Lex
   ')'                 { ParenRight }
   '.'                 { Period }
   '+'                 { Plus }
+  '?'                 { QuestionMark }
   ';'                 { Semicolon }
   '~'                 { Tilde }
 
@@ -80,10 +81,11 @@ FnClassMemberDecl : SFV fn identifier TypeParamList ValueParamList ':' TypeExpr 
 
 
 
-TypeExpr : AppliedTypeExpr { $1 }
-         | NameTypeExpr    { $1 }
-         | VoidTypeExpr    { $1 }
-         | FnTypeExpr      { $1 }
+TypeExpr : AppliedTypeExpr  { $1 }
+         | NameTypeExpr     { $1 }
+         | VoidTypeExpr     { $1 }
+         | FnTypeExpr       { $1 }
+         | NullableTypeExpr { $1 }
 
 AppliedTypeExpr : NameTypeExpr '[' TypeExprs ']' { AppliedTypeExpr $1 $3 }
 
@@ -92,6 +94,8 @@ NameTypeExpr : QualifiedName { NameTypeExpr $1 }
 VoidTypeExpr : void { VoidTypeExpr }
 
 FnTypeExpr : fn '(' TypeExprs ')' '=>' TypeExpr { FnTypeExpr $3 $6 }
+
+NullableTypeExpr : '?' TypeExpr { NullableTypeExpr $2 }
 
 
 
