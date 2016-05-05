@@ -23,13 +23,21 @@ convert file = convert' (Env (Map.singleton "this" VariableValueSymbol) Map.empt
 convert' :: Env -> File -> String
 convert' env = (>>= convertDecl env)
 
+convertTypeParamList :: Env -> [TypeParam] -> String
+convertTypeParamList _ [] = ""
+convertTypeParamList _ ts = "[" ++ intercalate ", " (map go ts) ++ "]"
+  where go (TypeParam Covariant     n) = "+" ++ n
+        go (TypeParam Contravariant n) = "-" ++ n
+        go (TypeParam Invariant     n) = n
+
 convertDecl :: Env -> Decl -> String
 convertDecl env (NamespaceDecl n) = "namespace " ++ convertNamespaceName env n ++ ";\n"
 convertDecl env (UsingDecl n) = "using " ++ convertNamespaceName env n ++ ";\n"
-convertDecl env (ClassDecl n _ _ ds) =
-  "final class " ++ n ++ " {\n" ++ (ds >>= convertClassMemberDecl env) ++ "}\n"
+convertDecl env (ClassDecl n ts _ _ ds) =
+  "final class " ++ n ++ convertTypeParamList env ts
+   ++ " {\n" ++ (ds >>= convertClassMemberDecl env) ++ "}\n"
 convertDecl env (ModuleDecl n ds) =
-  convertDecl env (ClassDecl n Nothing [] (map makeStatic ds))
+  convertDecl env (ClassDecl n [] Nothing [] (map makeStatic ds))
   where makeStatic (FnClassMemberDecl _ n ps rt b) =
           FnClassMemberDecl True n ps rt b
 

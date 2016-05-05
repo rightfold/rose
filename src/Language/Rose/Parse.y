@@ -12,22 +12,28 @@ import Language.Rose.Lex (Token(..))
 %error { error . show }
 
 %token
+  namespace           { Namespace }
+  module              { Module }
   class               { Class }
+  using               { Using }
+  void                { Void }
   end                 { End }
   fn                  { Fn }
   is                  { Is }
-  module              { Module }
-  namespace           { Namespace }
-  using               { Using }
-  void                { Void }
 
   identifier          { Identifier $$ }
 
+  '=>'                { ThickArrow }
+  '->'                { ThinArrow }
+  '['                 { BracketLeft }
+  ']'                 { BracketRight }
   ':'                 { Colon }
   ','                 { Comma }
+  '='                 { Equals }
   '('                 { ParenLeft }
   ')'                 { ParenRight }
   '.'                 { Period }
+  '+'                 { Plus }
   ';'                 { Semicolon }
   '~'                 { Tilde }
 
@@ -47,7 +53,8 @@ NamespaceDecl : namespace NamespaceName ';' { NamespaceDecl $2 }
 
 UsingDecl : using NamespaceName ';' { UsingDecl $2 }
 
-ClassDecl : class identifier is ClassMemberDecls end ';' { ClassDecl $2 Nothing [] $4 }
+ClassDecl : class identifier TypeParamList is ClassMemberDecls end ';'
+              { ClassDecl $2 $3 Nothing [] $5 }
 
 ModuleDecl : module identifier is ClassMemberDecls end ';' { ModuleDecl $2 $4 }
 
@@ -83,6 +90,17 @@ NameExpr : QualifiedName { NameExpr $1 }
 StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 
 
+
+TypeParamList :                    { [] }
+              | '[' TypeParams ']' { $2 }
+
+TypeParams : TypeParam                { [$1] }
+           | TypeParam ',' TypeParams { $1 : $3 }
+
+TypeParam : Variance identifier { TypeParam $1 $2 }
+
+Variance : '+' { Covariant }
+         |     { Invariant }
 
 ClassMemberDecls :                                  { [] }
                  | ClassMemberDecl ClassMemberDecls { $1 : $2 }

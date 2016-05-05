@@ -6,10 +6,14 @@ type NamespaceName = [String]
 
 data QualifiedName = QualifiedName (Maybe NamespaceName) String deriving (Show)
 
+data TypeParam = TypeParam Variance String deriving (Show)
+
+data Variance = Covariant | Contravariant | Invariant deriving (Show)
+
 data Decl
   = NamespaceDecl NamespaceName
   | UsingDecl NamespaceName
-  | ClassDecl String (Maybe QualifiedName) [QualifiedName] [ClassMemberDecl]
+  | ClassDecl String [TypeParam] (Maybe QualifiedName) [QualifiedName] [ClassMemberDecl]
   | ModuleDecl String [ClassMemberDecl]
   deriving (Show)
 

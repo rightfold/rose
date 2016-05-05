@@ -7,22 +7,28 @@ module Language.Rose.Lex where
 tokens :-
   $white              ;
 
+  namespace           { const Namespace }
+  module              { const Module }
   class               { const Class }
+  using               { const Using }
+  void                { const Void }
   end                 { const End }
   fn                  { const Fn }
   is                  { const Is }
-  module              { const Module }
-  namespace           { const Namespace }
-  using               { const Using }
-  void                { const Void }
 
   [a-zA-Z]+           { Identifier }
 
+  \=\>                { const ThickArrow }
+  \-\>                { const ThinArrow }
+  \[                  { const BracketLeft }
+  \]                  { const BracketRight }
   \:                  { const Colon }
   \,                  { const Comma }
+  \=                  { const Equals }
   \(                  { const ParenLeft }
   \)                  { const ParenRight }
   \.                  { const Period }
+  \+                  { const Plus }
   \;                  { const Semicolon }
   \~                  { const Tilde }
 
@@ -39,11 +45,17 @@ data Token
 
   | Identifier String
 
+  | ThickArrow
+  | ThinArrow
+  | BracketLeft
+  | BracketRight
   | Colon
   | Comma
+  | Equals
   | ParenLeft
   | ParenRight
   | Period
+  | Plus
   | Semicolon
   | Tilde
   deriving (Eq, Show)
