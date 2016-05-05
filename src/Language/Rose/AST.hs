@@ -35,6 +35,7 @@ data Expr
   = NameExpr QualifiedName
   | CallExpr Expr [Expr]
   | NewExpr TypeExpr [Expr]
+  | CastExpr TypeExpr Expr
   | LambdaExpr [String] Expr
   | LetExpr String Expr Expr
   | InstanceMethodExpr Expr String

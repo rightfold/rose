@@ -21,6 +21,7 @@ import qualified Language.Rose.Lex as Lex
   class               { Class }
   field               { Field }
   using               { Using }
+  cast                { Cast }
   void                { Void }
   end                 { End }
   let                 { Let }
@@ -108,12 +109,15 @@ CallExpr : PrimExpr { $1 }
 PrimExpr : NameExpr         { $1 }
          | StaticMethodExpr { $1 }
          | NewExpr          { $1 }
+         | CastExpr         { $1 }
 
 NameExpr : QualifiedName { NameExpr $1 }
 
 StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 
 NewExpr : new TypeExpr ValueArgList { NewExpr $2 $3 }
+
+CastExpr : cast '[' TypeExpr ']' '(' Expr ')' { CastExpr $3 $6 }
 
 
 

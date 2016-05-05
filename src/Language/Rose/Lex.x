@@ -15,6 +15,7 @@ tokens :-
   class               { const Class }
   field               { const Field }
   using               { const Using }
+  cast                { const Cast }
   void                { const Void }
   end                 { const End }
   let                 { const Let }
@@ -48,6 +49,7 @@ data Token
   | Class
   | Field
   | Using
+  | Cast
   | Void
   | End
   | Let

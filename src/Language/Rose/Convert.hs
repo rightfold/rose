@@ -87,11 +87,15 @@ convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
     Just VariableValueSymbol -> "$" ++ n
     _ -> convertQualifiedName env q
 convertExprE env (NameExpr n) = convertQualifiedName env n
+convertExprE env (CallExpr n@(NameExpr _) as) =
+  convertExprE env n ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
 convertExprE env (CallExpr c as) =
   "call_user_func(" ++ convertExprE env c ++ (as >>= (", " ++) . convertExprE env) ++ ")"
 convertExprE env (NewExpr c as) =
   "new " ++ convertTypeExpr env c
   ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
+convertExprE env (CastExpr t e) =
+  "(" ++ convertTypeExpr env t ++ ")(" ++ convertExprE env e ++ ")"
 convertExprE env (LambdaExpr ps b) =
   "function"
   ++ "(" ++ intercalate ", " (map ("$" ++) ps) ++ ")"
