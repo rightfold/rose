@@ -61,12 +61,15 @@ convertClassMemberDecl env (FnClassMemberDecl sfv n ps rt b) =
                      env ps
 
 convertTypeExpr :: Env -> TypeExpr -> String
-convertTypeExpr env (NameTypeExpr n)  = convertQualifiedName env n
-convertTypeExpr _   VoidTypeExpr      = "void"
-convertTypeExpr env (FnTypeExpr ps r) =
+convertTypeExpr env (NameTypeExpr n)       = convertQualifiedName env n
+convertTypeExpr _   VoidTypeExpr           = "void"
+convertTypeExpr env (FnTypeExpr ps r)      =
   "(function"
   ++ "(" ++ intercalate ", " (map (convertTypeExpr env) ps)
   ++ "): " ++ convertTypeExpr env r ++ ")"
+convertTypeExpr env (AppliedTypeExpr p ts) =
+  convertTypeExpr env p
+  ++ "[" ++ intercalate ", " (map (convertTypeExpr env) ts) ++ "]"
 
 convertExprS :: Env -> (String -> String) -> Expr -> String
 convertExprS env result e = result (convertExprE env e)

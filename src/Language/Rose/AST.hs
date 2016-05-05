@@ -28,6 +28,7 @@ data TypeExpr
   = NameTypeExpr QualifiedName
   | VoidTypeExpr
   | FnTypeExpr [TypeExpr] TypeExpr
+  | AppliedTypeExpr TypeExpr [TypeExpr]
   deriving (Show)
 
 data Expr

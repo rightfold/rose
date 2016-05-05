@@ -77,9 +77,12 @@ FnClassMemberDecl : SFV fn identifier ValueParamList ':' TypeExpr is Expr ';'
 
 
 
-TypeExpr : NameTypeExpr { $1 }
-         | VoidTypeExpr { $1 }
-         | FnTypeExpr   { $1 }
+TypeExpr : AppliedTypeExpr { $1 }
+         | NameTypeExpr    { $1 }
+         | VoidTypeExpr    { $1 }
+         | FnTypeExpr      { $1 }
+
+AppliedTypeExpr : NameTypeExpr '[' TypeExprs ']' { AppliedTypeExpr $1 $3 }
 
 NameTypeExpr : QualifiedName { NameTypeExpr $1 }
 
