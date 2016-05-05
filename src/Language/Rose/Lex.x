@@ -9,6 +9,7 @@ tokens :-
   \-\-.*              ;
 
   namespace           { const Namespace }
+  unchecked           { const Unchecked }
   virtual             { const Virtual }
   module              { const Module }
   static              { const Static }
@@ -47,6 +48,7 @@ tokens :-
 {
 data Token
   = Namespace
+  | Unchecked
   | Virtual
   | Module
   | Static

@@ -40,6 +40,7 @@ data Expr
   | LambdaExpr [String] Expr
   | LetExpr String Expr Expr
   | IfExpr Expr Expr Expr
+  | UncheckedExpr Expr
   | InstanceMethodExpr Expr String
   | InstanceVariableExpr Expr String
   | StaticMethodExpr QualifiedName String

@@ -116,6 +116,8 @@ convertExprE env (LambdaExpr ps b) =
                 & map fst
                 & filter (/= "this")
                 & filter (not . (`elem` ps))
+convertExprE env (UncheckedExpr e) =
+  "/* UNSAFE_EXPR */ " ++ convertExprE env e ++ ""
 convertExprE env (InstanceMethodExpr e n) =
   "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
 convertExprE env (InstanceVariableExpr e n) =

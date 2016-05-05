@@ -15,6 +15,7 @@ import qualified Language.Rose.Lex as Lex
 
 %token
   namespace           { Namespace }
+  unchecked           { Unchecked }
   virtual             { Lex.Virtual }
   module              { Module }
   static              { Lex.Static }
@@ -118,6 +119,7 @@ PrimExpr : NameExpr         { $1 }
          | StaticMethodExpr { $1 }
          | NewExpr          { $1 }
          | CastExpr         { $1 }
+         | UncheckedExpr    { $1 }
 
 NameExpr : QualifiedName { NameExpr $1 }
 
@@ -126,6 +128,8 @@ StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
 NewExpr : new TypeExpr ValueArgList { NewExpr $2 $3 }
 
 CastExpr : cast '[' TypeExpr ']' '(' Expr ')' { CastExpr $3 $6 }
+
+UncheckedExpr : unchecked '(' Expr ')' { UncheckedExpr $3 }
 
 
 
