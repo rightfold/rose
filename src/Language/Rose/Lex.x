@@ -17,9 +17,11 @@ tokens :-
   using               { const Using }
   void                { const Void }
   end                 { const End }
+  let                 { const Let }
   new                 { const New }
   fn                  { const Fn }
   is                  { const Is }
+  in                  { const In }
 
   [a-zA-Z]+           { Identifier }
 
@@ -48,9 +50,11 @@ data Token
   | Using
   | Void
   | End
+  | Let
   | New
   | Fn
   | Is
+  | In
 
   | Identifier String
 

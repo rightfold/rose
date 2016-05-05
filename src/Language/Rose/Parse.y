@@ -23,8 +23,10 @@ import qualified Language.Rose.Lex as Lex
   using               { Using }
   void                { Void }
   end                 { End }
+  let                 { Let }
   new                 { New }
   fn                  { Fn }
+  in                  { In }
   is                  { Is }
 
   identifier          { Identifier $$ }
@@ -95,6 +97,7 @@ FnTypeExpr : fn '(' TypeExprs ')' '=>' TypeExpr { FnTypeExpr $3 $6 }
 Expr : LambdaExpr { $1 }
 
 LambdaExpr : fn '(' Identifiers ')' '=>' Expr { LambdaExpr $3 $6 }
+           | let identifier '=' Expr in Expr { LetExpr $2 $4 $6 }
            | CallExpr { $1 }
 
 CallExpr : PrimExpr { $1 }

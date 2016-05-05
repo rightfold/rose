@@ -74,6 +74,10 @@ convertTypeExpr env (AppliedTypeExpr p ts) =
   ++ "<" ++ intercalate ", " (map (convertTypeExpr env) ts) ++ ">"
 
 convertExprS :: Env -> (String -> String) -> Expr -> String
+convertExprS env result (LetExpr n v b) =
+  convertExprS env (\e -> "$" ++ n ++ " = " ++ e ++ ";\n") v
+  ++ convertExprS bEnv result b
+  where bEnv = env { vsyms = Map.insert n VariableValueSymbol (vsyms env) }
 convertExprS env result e = result (convertExprE env e)
 
 convertExprE :: Env -> Expr -> String

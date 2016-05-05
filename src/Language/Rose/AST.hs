@@ -36,6 +36,7 @@ data Expr
   | CallExpr Expr [Expr]
   | NewExpr TypeExpr [Expr]
   | LambdaExpr [String] Expr
+  | LetExpr String Expr Expr
   | InstanceMethodExpr Expr String
   | InstanceVariableExpr Expr String
   | StaticMethodExpr QualifiedName String
