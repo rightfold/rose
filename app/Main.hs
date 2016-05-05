@@ -5,4 +5,4 @@ import Language.Rose.Lex (alexScanTokens)
 import Language.Rose.Parse (parse)
 
 main :: IO ()
-main = interact $ convert . parse . alexScanTokens
+main = interact $ ("<?hh // strict\n" ++) . convert . parse . alexScanTokens
