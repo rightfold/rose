@@ -101,6 +101,8 @@ convertExprE env (LambdaExpr ps b) =
                 & filter (not . (`elem` ps))
 convertExprE env (InstanceMethodExpr e n) =
   "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
+convertExprE env (InstanceVariableExpr e n) =
+  convertExprE env e ++ "->" ++ n
 convertExprE env (StaticMethodExpr c n) =
   "class_meth(" ++ convertQualifiedName env c ++ "::class, '" ++ n ++ "')"
 

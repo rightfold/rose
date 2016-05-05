@@ -100,6 +100,7 @@ LambdaExpr : fn '(' Identifiers ')' '=>' Expr { LambdaExpr $3 $6 }
 CallExpr : PrimExpr { $1 }
          | CallExpr ValueArgList { CallExpr $1 $2 }
          | CallExpr '.' identifier { InstanceMethodExpr $1 $3 }
+         | CallExpr '->' identifier { InstanceVariableExpr $1 $3 }
 
 PrimExpr : NameExpr         { $1 }
          | StaticMethodExpr { $1 }
