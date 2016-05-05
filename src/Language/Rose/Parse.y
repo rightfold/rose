@@ -108,7 +108,10 @@ Expr : LambdaExpr { $1 }
 LambdaExpr : fn '(' Identifiers ')' '=>' Expr { LambdaExpr $3 $6 }
            | let identifier '=' Expr in Expr { LetExpr $2 $4 $6 }
            | if Expr then Expr else Expr { IfExpr $2 $4 $6 }
-           | CallExpr { $1 }
+           | EqExpr { $1 }
+
+EqExpr : CallExpr '=' CallExpr { BinaryExpr "===" $1 $3 }
+       | CallExpr              { $1 }
 
 CallExpr : PrimExpr { $1 }
          | CallExpr ValueArgList { CallExpr $1 $2 }

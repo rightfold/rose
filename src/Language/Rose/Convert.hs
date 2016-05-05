@@ -121,6 +121,10 @@ convertExprE env (LambdaExpr ps b) =
                 & filter (not . (`elem` ps))
 convertExprE env (UncheckedExpr e) =
   "/* UNSAFE_EXPR */ " ++ convertExprE env e ++ ""
+convertExprE env (BinaryExpr op l r) =
+  convertExprE env l
+  ++ " " ++ op ++ " "
+  ++ convertExprE env r
 convertExprE env (InstanceMethodExpr e n) =
   "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
 convertExprE env (InstanceVariableExpr e n) =
