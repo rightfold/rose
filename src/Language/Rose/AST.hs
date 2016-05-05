@@ -34,6 +34,7 @@ data TypeExpr
 data Expr
   = NameExpr QualifiedName
   | CallExpr Expr [Expr]
+  | NewExpr TypeExpr [Expr]
   | InstanceMethodExpr Expr String
   | InstanceVariableExpr Expr String
   | StaticMethodExpr QualifiedName String

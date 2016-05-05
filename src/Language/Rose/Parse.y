@@ -100,10 +100,13 @@ CallExpr : PrimExpr { $1 }
 
 PrimExpr : NameExpr         { $1 }
          | StaticMethodExpr { $1 }
+         | NewExpr          { $1 }
 
 NameExpr : QualifiedName { NameExpr $1 }
 
 StaticMethodExpr : QualifiedName ':' identifier { StaticMethodExpr $1 $3 }
+
+NewExpr : new TypeExpr ValueArgList { NewExpr $2 $3 }
 
 
 

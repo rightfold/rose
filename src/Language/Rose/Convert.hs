@@ -69,7 +69,7 @@ convertTypeExpr env (FnTypeExpr ps r)      =
   ++ "): " ++ convertTypeExpr env r ++ ")"
 convertTypeExpr env (AppliedTypeExpr p ts) =
   convertTypeExpr env p
-  ++ "[" ++ intercalate ", " (map (convertTypeExpr env) ts) ++ "]"
+  ++ "<" ++ intercalate ", " (map (convertTypeExpr env) ts) ++ ">"
 
 convertExprS :: Env -> (String -> String) -> Expr -> String
 convertExprS env result e = result (convertExprE env e)
@@ -82,6 +82,9 @@ convertExprE env (NameExpr q@(QualifiedName Nothing n)) =
 convertExprE env (NameExpr n) = convertQualifiedName env n
 convertExprE env (CallExpr c as) =
   "call_user_func(" ++ convertExprE env c ++ (as >>= (", " ++) . convertExprE env) ++ ")"
+convertExprE env (NewExpr c as) =
+  "new " ++ convertTypeExpr env c
+  ++ "(" ++ intercalate ", " (map (convertExprE env) as) ++ ")"
 convertExprE env (InstanceMethodExpr e n) =
   "inst_meth(" ++ convertExprE env e ++ ", '" ++ n ++ "')"
 convertExprE env (StaticMethodExpr c n) =
